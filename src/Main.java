@@ -1,51 +1,59 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
+
+    //GLOBAL STRINGS
+    static final String disclaimer = " Be sure to use correct grammar and capitalization.";
+    static final String correct = "Your answer is correct. Your new score is ";
+    static final String incorrect = "Your answer is incorrect. The correct answer is ";
+
     public static void main(String[] args) {
 
-        //DEFINING THE DATA
-        final String question1 = "What is 5+5?";
-        final int answer1 = 10;
-        final String question2 = "What is the square root of 121?";
-        final int answer2 = 11;
-        final String question3 = "What is the derivative of 2^2?";
-        final int answer3 = 0;
-        final String wrong = "Your answer is incorrect. The correct answer is: ";
-        final String right = "Your answer is correct. Your score is: ";
+        //Q&A Pairs
+        QAPair zero = new QAPair("What is the capital of Colorado?", "Denver");
+        QAPair one = new QAPair("What is the capital of Syria?", "Damascus");
+        QAPair two = new QAPair("What is the derivative of 2^2?", "0");
+        QAPair three = new QAPair("What is the first number in the specific heat capacity of water?", "4");
+        QAPair four = new QAPair("Which case established judicial review?", "Marbury v. Madison");
+
+        List<QAPair> qapairs = new ArrayList<>();
+        qapairs.add(zero);
+        qapairs.add(one);
+        qapairs.add(two);
+        qapairs.add(three);
+        qapairs.add(four);
+
+        //UTILITY STRINGS
+        final String proceed = "Type 'quit' if you wish to quit, and anything else if you wish to proceed.";
+        int off = 0;
         int score = 0;
         Scanner prompter = new Scanner(System.in);
 
-        //QUESTION 1
-        System.out.println(question1);
-        int input1 = prompter.nextInt();
-        if(input1 == answer1) {
-            score++;
-            System.out.println(right + score);
-        } else {
-            System.out.println(wrong + answer1);
+        //GAME MECHANISM
+        while(off == 0) {
+            for (QAPair qapair : qapairs) {
+                System.out.println(qapair.question + disclaimer);
+                String input = prompter.nextLine();
+                if (input.equals(qapair.answer)) {
+                    score = updateScore(score);
+                    System.out.println(correct + score + ".");
+                } else {
+                    System.out.println(incorrect + qapair.answer + ".");
+                }
+            }
+            Scanner scanner = new Scanner(System.in);
+            System.out.println(proceed);
+            String wishQuit = scanner.nextLine();
+            if(wishQuit.equals("quit")) {
+                off = 1;
+                System.out.println("Thanks for playing! Your final score is " + score + ".");
+            }
         }
+    }
 
-        //QUESTION 2
-        System.out.println(question2);
-        int input2 = prompter.nextInt();
-        if(input2 == answer2) {
-            score++;
-            System.out.println(right + score);
-        } else {
-            System.out.println(wrong + answer2);
-        }
-
-        //QUESTION 3
-        System.out.println(question3);
-        int input3 = prompter.nextInt();
-        if(input3 == answer3) {
-            score++;
-            System.out.println(right + score);
-        } else {
-            System.out.println(wrong + answer3);
-        }
-
-        //END OF GAME
-        System.out.println("Congratulations! The game is over. You have achieved a score of " + score);
+    public static int updateScore(int score) {
+        return score + 1;
     }
 }
